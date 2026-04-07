@@ -1,0 +1,20 @@
+micronaut:
+  application:
+    name: user-service
+  server:
+    port: 8082
+  security:
+    enabled: false   # manejamos JWT manualmente para simplificar
+datasources:
+  default:
+    url: jdbc:h2:mem:usersdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.H2Dialect

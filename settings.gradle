@@ -1,0 +1,6 @@
+rootProject.name = "comunidad-lanchas"
+
+include 'services:user-service'
+include 'services:tour-service'
+include 'services:booking-service'
+include 'services:review-service'
