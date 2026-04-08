@@ -1,4 +1,4 @@
-package main.java.com.review.controller;
+package com.review.controller;
 
 import com.review.client.BookingClient;
 import com.review.dto.BookingDTO;

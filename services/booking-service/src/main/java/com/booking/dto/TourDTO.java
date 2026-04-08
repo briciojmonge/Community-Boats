@@ -1,31 +1,30 @@
-package main.java.com.booking.dto;
+package com.booking.dto;
 
-public class UserDTO {
+public class TourDTO {
     private Long id;
     private String name;
-    private String email;
-    private String role;      // "GUIDE" o "TOURIST"
-    private String community;
+    private String location;
+    private Double price;
+    private Long guideId;
 
-    public UserDTO() {}
+    public TourDTO() {}
 
-    public UserDTO(Long id, String name, String email, String role, String community) {
+    public TourDTO(Long id, String name, String location, Double price, Long guideId) {
         this.id = id;
         this.name = name;
-        this.email = email;
-        this.role = role;
-        this.community = community;
+        this.location = location;
+        this.price = price;
+        this.guideId = guideId;
     }
 
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-    public String getCommunity() { return community; }
-    public void setCommunity(String community) { this.community = community; }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+    public Double getPrice() { return price; }
+    public void setPrice(Double price) { this.price = price; }
+    public Long getGuideId() { return guideId; }
+    public void setGuideId(Long guideId) { this.guideId = guideId; }
 }

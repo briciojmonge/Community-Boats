@@ -1,49 +1,48 @@
-package main.java.com.tour.security;
+package com.tour.security;
 
-import com.user.model.UserRole;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 public class JwtUtil {
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
     private static final long EXPIRATION_TIME = 86400000; // 24h
 
-    public static String generateToken(Long userId, UserRole role) {
+    public static String generateToken(Long userId, String role) {
         return Jwts.builder()
-                .setSubject(userId.toString())
-                .claim("role", role.name())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SECRET_KEY)
+                .subject(userId.toString())
+                .claim("role", role)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SECRET_KEY, Jwts.SIG.HS256)
                 .compact();
     }
 
     public static Long getUserIdFromToken(String token) {
-        String subject = Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+        Claims claims = Jwts.parser()
+                .verifyWith(SECRET_KEY)
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-        return Long.parseLong(subject);
+                .parseSignedClaims(token)
+                .getPayload();
+        return Long.parseLong(claims.getSubject());
     }
 
-    public static UserRole getRoleFromToken(String token) {
-        String roleStr = Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+    public static String getRoleFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(SECRET_KEY)
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("role", String.class);
-        return UserRole.valueOf(roleStr);
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("role", String.class);
     }
 
     public static boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
+            Jwts.parser()
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
             return false;

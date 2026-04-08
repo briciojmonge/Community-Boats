@@ -1,4 +1,4 @@
-package main.java.com.user.dto;
+package com.user.dto;
 
 public class LoginRequest {
     private String email;

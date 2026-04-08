@@ -1,4 +1,4 @@
-package main.java.com.user;
+package com.user;
 
 import io.micronaut.runtime.Micronaut;
 

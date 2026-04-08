@@ -1,4 +1,4 @@
-package main.java.com.review.client;
+package com.review.client;
 
 import com.review.dto.BookingDTO;
 import io.micronaut.http.annotation.Get;

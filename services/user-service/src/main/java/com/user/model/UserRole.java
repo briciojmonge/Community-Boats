@@ -1,4 +1,4 @@
-package main.java.com.user.model;
+package com.user.model;
 
 public enum UserRole {
     GUIDE, TOURIST

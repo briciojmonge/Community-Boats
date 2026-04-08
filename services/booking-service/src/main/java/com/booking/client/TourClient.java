@@ -1,4 +1,4 @@
-package main.java.com.booking.client;
+package com.booking.client;
 
 import com.booking.dto.TourDTO;
 import io.micronaut.http.annotation.Get;

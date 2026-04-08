@@ -1,9 +1,8 @@
-package main.java.com.user.controller;
+package com.user.controller;
 
 import com.user.dto.LoginRequest;
 import com.user.dto.JwtResponse;
 import com.user.model.User;
-import com.user.model.UserRole;
 import com.user.security.JwtUtil;
 import com.user.service.UserService;
 import io.micronaut.http.HttpResponse;
@@ -19,7 +18,7 @@ public class AuthController {
 
     @Post("/register")
     public HttpResponse<?> register(@Body User user) {
-        if (user.getRole() == null) user.setRole(UserRole.TOURIST);
+        if (user.getRole() == null) user.setRole("TOURIST");
         User saved = userService.register(user);
         String token = JwtUtil.generateToken(saved.getId(), saved.getRole());
         return HttpResponse.created(new JwtResponse(token));

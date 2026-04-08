@@ -1,4 +1,4 @@
-package main.java.com.tour.controller;
+package com.tour.controller;
 
 import com.tour.client.UserClient;
 import com.tour.dto.TourCreateRequest;
@@ -8,6 +8,7 @@ import com.tour.model.Tour;
 import com.tour.security.JwtUtil;
 import com.tour.service.TourService;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class TourController {
         Long guideId = JwtUtil.getUserIdFromToken(token);
         UserDTO guide = userClient.findById(guideId);
         if (guide == null || !"GUIDE".equals(guide.getRole())) {
-            return HttpResponse.forbidden();
+            return HttpResponse.status(HttpStatus.FORBIDDEN);
         }
 
         Tour tour = tourService.create(request.getName(), request.getLocation(), request.getPrice(), guideId);

@@ -1,4 +1,4 @@
-package main.java.com.user.controller;
+package com.user.controller;
 
 import com.user.model.User;
 import com.user.service.UserService;

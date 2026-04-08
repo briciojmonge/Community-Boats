@@ -1,4 +1,4 @@
-package main.java.com.tour.model;
+package com.tour.model;
 
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;

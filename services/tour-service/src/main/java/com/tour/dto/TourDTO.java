@@ -1,4 +1,4 @@
-package main.java.com.tour.dto;
+package com.tour.dto;
 
 public class TourDTO {
     private Long id;
@@ -16,5 +16,11 @@ public class TourDTO {
         this.guideName = guideName;
         this.guideCommunity = guideCommunity;
     }
-    // getters y setters
+
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public String getLocation() { return location; }
+    public Double getPrice() { return price; }
+    public String getGuideName() { return guideName; }
+    public String getGuideCommunity() { return guideCommunity; }
 }

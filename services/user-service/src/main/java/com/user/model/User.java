@@ -1,4 +1,4 @@
-package main.java.com.user.model;
+package com.user.model;
 
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
@@ -10,12 +10,12 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private UserRole role;
+    private String role;
     private String community; // solo para guías
 
     public User() {}
 
-    public User(String name, String email, String password, UserRole role, String community) {
+    public User(String name, String email, String password, String role, String community) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -32,8 +32,8 @@ public class User {
     public void setEmail(String email) { this.email = email; }
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-    public UserRole getRole() { return role; }
-    public void setRole(UserRole role) { this.role = role; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
     public String getCommunity() { return community; }
     public void setCommunity(String community) { this.community = community; }
 }

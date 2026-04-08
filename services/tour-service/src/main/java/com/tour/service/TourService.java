@@ -1,4 +1,4 @@
-package main.java.com.tour.service;
+package com.tour.service;
 
 import com.tour.model.Tour;
 import com.tour.repository.TourRepository;

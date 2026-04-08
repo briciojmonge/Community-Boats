@@ -1,4 +1,4 @@
-package main.java.com.booking.service;
+package com.booking.service;
 
 import com.booking.model.Booking;
 import com.booking.model.BookingStatus;

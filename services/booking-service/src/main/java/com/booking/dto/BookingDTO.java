@@ -1,4 +1,4 @@
-package main.java.com.booking.dto;
+package com.booking.dto;
 
 import java.time.LocalDateTime;
 

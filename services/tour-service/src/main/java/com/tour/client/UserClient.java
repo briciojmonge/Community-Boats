@@ -1,4 +1,4 @@
-package main.java.com.tour.client;
+package com.tour.client;
 
 import com.tour.dto.UserDTO;
 import io.micronaut.http.annotation.Get;

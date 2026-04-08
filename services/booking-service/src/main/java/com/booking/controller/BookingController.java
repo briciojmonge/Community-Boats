@@ -1,4 +1,4 @@
-package main.java.com.booking.controller;
+package com.booking.controller;
 
 import com.booking.client.TourClient;
 import com.booking.client.UserClient;
@@ -7,6 +7,7 @@ import com.booking.model.Booking;
 import com.booking.security.JwtUtil;
 import com.booking.service.BookingService;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import java.time.LocalDateTime;
 
@@ -30,7 +31,7 @@ public class BookingController {
 
         Long userId = JwtUtil.getUserIdFromToken(token);
         UserDTO user = userClient.findById(userId);
-        if (user == null || !"TOURIST".equals(user.getRole())) return HttpResponse.forbidden();
+        if (user == null || !"TOURIST".equals(user.getRole())) return HttpResponse.status(HttpStatus.FORBIDDEN);
 
         TourDTO tour = tourClient.findById(request.getTourId());
         if (tour == null) return HttpResponse.notFound();
@@ -47,7 +48,7 @@ public class BookingController {
         // Validar token y que el usuario sea el mismo o admin
         String token = auth.substring(7);
         Long loggedUserId = JwtUtil.getUserIdFromToken(token);
-        if (!loggedUserId.equals(userId)) return HttpResponse.forbidden();
+        if (!loggedUserId.equals(userId)) return HttpResponse.status(HttpStatus.FORBIDDEN);
 
         var bookings = bookingService.findByUserId(userId);
         var dtos = bookings.stream().map(b -> {

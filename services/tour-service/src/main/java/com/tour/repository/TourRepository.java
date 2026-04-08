@@ -1,10 +1,12 @@
-package main.java.com.tour.repository;
+package com.tour.repository;
 
 import com.tour.model.Tour;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.CrudRepository;
+import java.util.List;
 
-@JdbcRepository
+@JdbcRepository(dialect = Dialect.H2)
 public interface TourRepository extends CrudRepository<Tour, Long> {
-    Iterable<Tour> findAll();
+    List<Tour> findAll();
 }

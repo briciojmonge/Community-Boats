@@ -1,4 +1,4 @@
-package main.java.com.review.service;
+package com.review.service;
 
 import com.review.model.Review;
 import com.review.repository.ReviewRepository;
