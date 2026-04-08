@@ -1,30 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Auth from './components/Auth';
-import TourList from './components/TourList';
-import CreateTour from './components/CreateTour';
-import MyBookings from './components/MyBookings';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-function App() {
-  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('token'));
-  const location = useLocation();
-
-  useEffect(() => {
-    setLoggedIn(!!localStorage.getItem('token'));
-  }, [location]);
-
+function Navbar({ loggedIn, onLogout }) {
   return (
-    <div>
-      <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      <Routes>
-        <Route path="/" element={<TourList />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/create-tour" element={<CreateTour />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-      </Routes>
-    </div>
+    <nav className="bg-gray-800 text-white">
+      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-4">
+        <Link to="/" className="font-semibold hover:underline">
+          Community Boats
+        </Link>
+
+        {loggedIn ? (
+          <>
+            <Link to="/create-tour" className="hover:underline">
+              Publicar tour
+            </Link>
+            <Link to="/my-bookings" className="hover:underline">
+              Mis reservas
+            </Link>
+            <button onClick={onLogout} className="hover:underline">
+              Cerrar sesión
+            </button>
+          </>
+        ) : (
+          <Link to="/auth" className="hover:underline">
+            Login / Registro
+          </Link>
+        )}
+      </div>
+    </nav>
   );
 }
 
-export default App;
+export default Navbar;

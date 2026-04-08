@@ -2,11 +2,16 @@ package com.review.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JwtUtil {
-    private static final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
+    private static final String SECRET = "community-boats-super-secret-key-2026-very-secure";
+    private static final SecretKey SECRET_KEY =
+            Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     private static final long EXPIRATION_TIME = 86400000; // 24h
 
     public static String generateToken(Long userId, String role) {
@@ -15,7 +20,7 @@ public class JwtUtil {
                 .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SECRET_KEY, Jwts.SIG.HS256)
+                .signWith(SECRET_KEY)
                 .compact();
     }
 
@@ -40,9 +45,9 @@ public class JwtUtil {
     public static boolean validateToken(String token) {
         try {
             Jwts.parser()
-                .verifyWith(SECRET_KEY)
-                .build()
-                .parseSignedClaims(token);
+                    .verifyWith(SECRET_KEY)
+                    .build()
+                    .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
             return false;

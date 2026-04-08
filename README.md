@@ -5,7 +5,7 @@
 ### Santiago Calderón
 ### Fabricio Monge
 
-A microservices-based boat booking and review platform with a modern React frontend and Spring Boot backend services.
+A microservices-based boat tour platform with booking and review features, built with React and Micronaut.
 
 ## Table of Contents
 
@@ -22,10 +22,10 @@ A microservices-based boat booking and review platform with a modern React front
 
 ## Overview
 
-Community-Boats is a cloud-native microservices application that manages boat tours, user accounts, bookings, and reviews. The application uses:
+Community-Boats is a locally runnable microservices application that manages boat tours, user accounts, bookings, and reviews. The application uses:
 
 - **Frontend**: React 18 with Vite and Tailwind CSS
-- **Backend**: Micronaut framework with Spring Data
+- **Backend**: Micronaut-based REST microservices
 - **Database**: H2 in-memory databases (development)
 - **Authentication**: JWT (JSON Web Tokens)
 - **Communication**: RESTful APIs with service-to-service communication
@@ -94,7 +94,7 @@ Community-Boats/
 │   │   │   ├── MyBookings.jsx
 │   │   │   ├── Navbar.jsx
 │   │   │   └── TourList.jsx
-│   │   ├── app.jsx                   # Main App component
+│   │   ├── App.jsx                   # Main App component
 │   │   ├── main.jsx                  # Entry point
 │   │   └── index.css                 # Global styles
 │   ├── index.html                    # HTML template
@@ -221,24 +221,20 @@ The frontend will automatically open at `http://localhost:5173`
 
 ### Option 2: Running Services Manually
 
-If you prefer not to use the scripts:
+If you prefer not to use the scripts, run each microservice from the project root:
 
 ```bash
 # User Service
-cd services/user-service
-./gradlew run
+./gradlew :services:user-service:run
 
-# In another terminal - Tour Service
-cd services/tour-service
-./gradlew run
+# Tour Service
+./gradlew :services:tour-service:run
 
-# In another terminal - Booking Service
-cd services/booking-service
-./gradlew run
+# Booking Service
+./gradlew :services:booking-service:run
 
-# In another terminal - Review Service
-cd services/review-service
-./gradlew run
+# Review Service
+./gradlew :services:review-service:run
 
 # Frontend
 cd frontend
@@ -262,7 +258,7 @@ cd ..
 ## Services
 
 ### User Service
-- **Port**: 8081
+- **Port**: 8082
 - **URL**: `http://localhost:8082`
 - **Database**: H2 (in-memory: usersdb)
 - **Responsibilities**: User registration, authentication, user profile management
@@ -270,7 +266,7 @@ cd ..
   - `POST /users/register` - Register new user
   - `POST /users/login` - User login
   - `GET /users/{id}` - Get user details
-  - `PUT /users/{id}` - Update user profile
+  - `GET /users` - List users
 
 ### Tour Service
 - **Port**: 8081
@@ -281,8 +277,6 @@ cd ..
   - `GET /tours` - List all tours
   - `POST /tours` - Create new tour
   - `GET /tours/{id}` - Get tour details
-  - `PUT /tours/{id}` - Update tour
-  - `DELETE /tours/{id}` - Delete tour
 
 ### Booking Service
 - **Port**: 8083
@@ -293,20 +287,15 @@ cd ..
   - `POST /bookings` - Create booking
   - `GET /bookings/{id}` - Get booking details
   - `GET /bookings/user/{userId}` - Get user's bookings
-  - `PUT /bookings/{id}/status` - Update booking status
-  - `DELETE /bookings/{id}` - Cancel booking
 
 ### Review Service
 - **Port**: 8084
 - **URL**: `http://localhost:8084`
 - **Database**: H2 (in-memory: reviewsdb)
-- **Responsibilities**: Review creation and management
+- **Responsibilities**: Review creation and listing
 - **Key Endpoints**:
   - `POST /reviews` - Create review
   - `GET /reviews/tour/{tourId}` - Get tour reviews
-  - `GET /reviews/{id}` - Get review details
-  - `PUT /reviews/{id}` - Update review
-  - `DELETE /reviews/{id}` - Delete review
 
 ## Development
 
@@ -327,20 +316,17 @@ npm run preview
 
 ### Backend Development
 
-Each microservice can be developed independently:
+Each microservice can be developed independently from the project root:
 
 ```bash
-# Example: Develop user service
-cd services/user-service
+# Run one service
+./gradlew :services:user-service:run
 
-# Run with auto-reload
-./gradlew run
+# Run tests for one service
+./gradlew :services:user-service:test
 
-# Run tests
-./gradlew test
-
-# Build JAR
-./gradlew build
+# Build one service
+./gradlew :services:user-service:build
 ```
 
 ### Making Changes
@@ -359,11 +345,11 @@ cd services/user-service
 
 ### Authentication
 
-All API calls (except login/register) require JWT token in header:
+Protected endpoints require a JWT token in the request header:
 
-```
 Authorization: Bearer <your_jwt_token>
-```
+
+Public endpoints such as `GET /tours` and `GET /tours/{id}` can be accessed without authentication.
 
 ### Example API Flow
 
@@ -371,7 +357,7 @@ Authorization: Bearer <your_jwt_token>
 # 1. Register user
 curl -X POST http://localhost:8082/users/register \
   -H "Content-Type: application/json" \
-  -d '{"username":"john","email":"john@example.com","password":"password123"}'
+  -d '{"name":"John","email":"john@example.com","password":"password123","role":"TOURIST","community":"Puntarenas"}'
 
 # 2. Login
 curl -X POST http://localhost:8082/users/login \
@@ -379,21 +365,20 @@ curl -X POST http://localhost:8082/users/login \
   -d '{"email":"john@example.com","password":"password123"}'
 # Response includes JWT token
 
-# 3. List tours (with token)
-curl -X GET http://localhost:8081/tours \
-  -H "Authorization: Bearer <jwt_token>"
+# 3. List tours (public endpoint)
+curl -X GET http://localhost:8081/tours
 
 # 4. Create booking
 curl -X POST http://localhost:8083/bookings \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <jwt_token>" \
-  -d '{"userId":1,"tourId":1,"bookingDate":"2026-05-01"}'
+  -d '{"tourId":1}'
 
 # 5. Create review
 curl -X POST http://localhost:8084/reviews \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <jwt_token>" \
-  -d '{"tourId":1,"rating":5,"comment":"Great experience!"}'
+  -d '{"bookingId":1,"rating":5,"comment":"Great experience!"}'
 ```
 
 ## 🐛 Troubleshooting
@@ -456,15 +441,9 @@ npm run dev
 - Frontend: Hard refresh browser (Ctrl+F5 or Cmd+Shift+R)
 - Backend: Services need manual restart for code changes
 
-## Environment Variables
+## Notes
 
-You can customize service behavior with environment variables:
-
-```bash
-# Example: Change tour service port
-export TOUR_SERVICE_PORT=8081
-
-# Run service
-./scripts/dev-tour.sh
-```
-
+- Frontend runs on port `5173` by default.
+- Backend services run on ports `8081` to `8084`.
+- Service ports are configured in each microservice `application.yml`.
+- H2 is used as a local in-memory database for development.
