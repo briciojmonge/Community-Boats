@@ -55,7 +55,7 @@ public class BookingController {
                 booking.getUserId(),
                 booking.getTourId(),
                 booking.getBookingDate(),
-                booking.getStatus().name(),
+                booking.getStatus(),
                 user.getName(),
                 tour.getName()
         );
@@ -90,7 +90,7 @@ public class BookingController {
                     b.getUserId(),
                     b.getTourId(),
                     b.getBookingDate(),
-                    b.getStatus().name(),
+                    b.getStatus(),
                     user != null ? user.getName() : "Desconocido",
                     tour != null ? tour.getName() : "Tour desconocido"
             );
@@ -111,7 +111,7 @@ public class BookingController {
                             booking.getUserId(),
                             booking.getTourId(),
                             booking.getBookingDate(),
-                            booking.getStatus().name(),
+                            booking.getStatus(),
                             user != null ? user.getName() : "Desconocido",
                             tour != null ? tour.getName() : "Tour desconocido"
                     );

@@ -1,11 +1,14 @@
 package com.user.model;
 
 import io.micronaut.data.annotation.Id;
+import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.data.annotation.MappedEntity;
 
-@MappedEntity
+@MappedEntity("users")
 public class User {
+
     @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private String email;

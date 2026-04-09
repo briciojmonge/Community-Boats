@@ -16,7 +16,7 @@ public class BookingService {
     }
 
     public Booking create(Long userId, Long tourId, LocalDateTime date) {
-        Booking booking = new Booking(userId, tourId, date, BookingStatus.CONFIRMED);
+        Booking booking = new Booking(userId, tourId, date, BookingStatus.CONFIRMED.name());
         return bookingRepository.save(booking);
     }
 
