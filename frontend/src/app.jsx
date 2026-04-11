@@ -5,32 +5,51 @@ import TourList from './components/TourList';
 import CreateTour from './components/CreateTour';
 import MyBookings from './components/MyBookings';
 import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+import { isAuthenticated, getUserRole, logoutUser } from './auth';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('token'));
+  const [loggedIn, setLoggedIn] = useState(isAuthenticated());
+  const [role, setRole] = useState(getUserRole());
   const navigate = useNavigate();
   const location = useLocation();
 
   const logout = () => {
-    localStorage.removeItem('token');
+    logoutUser();
     setLoggedIn(false);
+    setRole(null);
     navigate('/');
   };
 
   useEffect(() => {
-    setLoggedIn(!!localStorage.getItem('token'));
+    setLoggedIn(isAuthenticated());
+    setRole(getUserRole());
   }, [location]);
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar loggedIn={loggedIn} onLogout={logout} />
+      <Navbar loggedIn={loggedIn} role={role} onLogout={logout} />
 
       <main className="max-w-6xl mx-auto px-4 py-6">
         <Routes>
           <Route path="/" element={<TourList />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/create-tour" element={<CreateTour />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route
+            path="/create-tour"
+            element={
+              <ProtectedRoute requiredRole="GUIDE">
+                <CreateTour />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-bookings"
+            element={
+              <ProtectedRoute requiredRole="TOURIST">
+                <MyBookings />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
     </div>

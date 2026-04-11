@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Navbar({ loggedIn, onLogout }) {
+function Navbar({ loggedIn, role, onLogout }) {
   return (
     <nav className="bg-gray-800 text-white">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-4">
@@ -11,12 +11,18 @@ function Navbar({ loggedIn, onLogout }) {
 
         {loggedIn ? (
           <>
-            <Link to="/create-tour" className="hover:underline">
-              Publicar tour
-            </Link>
-            <Link to="/my-bookings" className="hover:underline">
-              Mis reservas
-            </Link>
+            {role === 'GUIDE' && (
+              <Link to="/create-tour" className="hover:underline">
+                Publicar tour
+              </Link>
+            )}
+
+            {role === 'TOURIST' && (
+              <Link to="/my-bookings" className="hover:underline">
+                Mis reservas
+              </Link>
+            )}
+
             <button onClick={onLogout} className="hover:underline">
               Cerrar sesión
             </button>
